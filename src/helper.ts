@@ -10,7 +10,8 @@ import * as decompress from 'decompress';
 import * as request from 'request';
 import * as request_progress from 'request-progress';
 import * as url_exists from 'url-exists';
-import * as compare_versions from 'compare-versions';
+//import * as compare_versions from 'compare-versions';
+import compare_versions = require('compare-versions');
 import * as child_process from 'child_process';
 
 export function cmakeArchBits(): number {
@@ -89,7 +90,7 @@ export function vscodeFolderPath(): string {
 export function initCMakeDownloadDir() {
     let cmakeDlPath = vscode.workspace.getConfiguration('cmake-tools-helper').get<string>('cmake_download_path');
     if (cmakeDlPath == null) {
-        const extPath = vscode.extensions.getExtension("maddouri.cmake-tools-helper").extensionPath;
+        const extPath = vscode.extensions.getExtension("SonglinPiao.cmake-tools-helper").extensionPath;
         const cmakeDlPath = extPath + path.sep + 'cmake_download';
         vscode.workspace.getConfiguration('cmake-tools-helper').update('cmake_download_path', cmakeDlPath, true);
     }

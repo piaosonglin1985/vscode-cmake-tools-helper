@@ -46,23 +46,23 @@ export class CMakeToolsHelper {
 
     activeCMakeConfigName()
     {
-        return this.cmakeTools.exports._backend.then(cmakeToolsWrapper => {
+        return this.cmakeTools.exports._cmakeDriver.then(cmakeTools => {
 
             // cmakeTools.exports         : CMakeToolsWrapper
             // cmakeToolsWrapper          : CMakeToolsWrapper
             // cmakeToolsWrapper.codeModel: CodeModelContent
 
-            if (cmakeToolsWrapper == null) {
+            if (cmakeTools == null) {
                 return new Promise<string>(resolve => resolve(helper.makeConfigName(null, null, null)));
             }
 
-            const codeModel           = cmakeToolsWrapper.codeModel;
+            const codeModel           = cmakeTools._codeModel;
             const configs             = (codeModel != null)
                                       ? codeModel.configurations  // CodeModelConfiguration
                                       : null;
             //const activeGenerator     = cmakeToolsWrapper.activeGenerator;
-            const activeTargetName    = cmakeToolsWrapper.defaultBuildTarget;
-            const activeBuiltTypeName = cmakeToolsWrapper.selectedBuildType;
+            const activeTargetName    = cmakeTools._ws.state.defaultBuildTarget;
+            const activeBuiltTypeName = cmakeTools.currentBuildType;
             const activeConfig        = (configs != null)
                                       ? configs.find(c => (c.name == activeBuiltTypeName))
                                       : null;
@@ -82,9 +82,9 @@ export class CMakeToolsHelper {
 
     updateCppTools() {
         this.activeCMakeConfigName().then(activeConfigName => {
-            this.cmakeTools.exports._backend.then(cmakeToolsWrapper => {
+            this.cmakeTools.exports._cmakeDriver.then(cmakeTools => {
                 // get all the configs
-                const codeModel    = cmakeToolsWrapper.codeModel;
+                const codeModel    = cmakeTools._codeModel;
                 const cmakeConfigs = ((typeof codeModel === 'undefined') || (codeModel == null))
                                    ? null
                                    : codeModel.configurations;  // CodeModelConfiguration
